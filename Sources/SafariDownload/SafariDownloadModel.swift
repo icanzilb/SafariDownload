@@ -1,26 +1,26 @@
 import Foundation
 import Combine
 
-class SafariDownloadModel: ObservableObject {
-    enum Error: LocalizedError {
+public class SafariDownloadModel: ObservableObject {
+    public enum Error: LocalizedError {
         case openFileHandleFailed(URL, code: Int32)
     }
 
-    @Published var bytesDownloaded: Int
-    @Published var bytesTotal: Int
-    @Published var deleted = false
+    @Published public var bytesDownloaded: Int
+    @Published public var bytesTotal: Int
+    @Published public var deleted = false
 
-    let fileURL: URL
-    let plistURL: URL
-    let originURL: URL
-    let dateAdded: Date
-    let id: UUID
-    let sandboxID: UUID
+    public let fileURL: URL
+    public let plistURL: URL
+    public let originURL: URL
+    public let dateAdded: Date
+    public let id: UUID
+    public let sandboxID: UUID
 
     private var source: DispatchSourceFileSystemObject!
     private let decoder = PropertyListDecoder()
 
-    init(url: URL, noObservation: Bool = false) throws {
+    public init(url: URL, noObservation: Bool = false) throws {
 
         plistURL = url.appendingPathComponent("Info.plist")
         let plist = try decoder.decode(DownloadPlist.self, from: Data(contentsOf: plistURL))
@@ -66,7 +66,7 @@ class SafariDownloadModel: ObservableObject {
         source?.cancel()
     }
 
-    func process(event: DispatchSource.FileSystemEvent) {
+    private func process(event: DispatchSource.FileSystemEvent) {
         if event.contains(.delete) {
             deleted = true
             source?.cancel()
